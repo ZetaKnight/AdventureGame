@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -171,8 +172,8 @@ public class GameScreen extends ScreenAdapter {
         drawStackPaper();
         orthogonalTiledMapRenderer.renderTileLayer(hiddenLayer);
         hud.draw(batch);
-        stageHandler.draw(deltaTime);
         batch.end();
+        stageHandler.draw(deltaTime);
     }
 
     private void drawPaperBallsThrown(){
@@ -221,7 +222,7 @@ public class GameScreen extends ScreenAdapter {
                 petePlatformer.getAssetManager().get("jump2.wav", Sound.class),batch, this);
         populateNPCs();
         petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).setLooping(true);
-//        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
+        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
         populateStackedPaper();
         hud = new HUD(this);
 
@@ -547,5 +548,9 @@ public class GameScreen extends ScreenAdapter {
 
     public OrthogonalTiledMapRenderer GetOrthogonalTiledMapRenderer(){
         return orthogonalTiledMapRenderer;
+    }
+
+    public Camera getCamera(){
+        return this.camera;
     }
 }

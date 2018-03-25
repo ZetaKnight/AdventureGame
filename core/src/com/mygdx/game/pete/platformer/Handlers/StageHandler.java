@@ -47,7 +47,6 @@ public class StageHandler {
 
     private void handleDoorOpening(){
         if(player.isOpenDoor()){
-            fadeInTransition = new FadeInTransition();
             MapLayer mapLayer = gameScreen.getTiledMap().getLayers().get(DOOR);
             for(MapObject object: mapLayer.getObjects()){
                 float newLocX = Float.valueOf(String.valueOf(object.getProperties().get("locationX")));
@@ -55,8 +54,10 @@ public class StageHandler {
                 float x = (object.getProperties().get("x", Float.class));
                 float y = (object.getProperties().get("y", Float.class));
                 String stage = String.valueOf(object.getProperties().get("open"));
-                if(player.getCollisionRect().overlaps(new Rectangle(x, y, GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4)))
+                if(player.getCollisionRect().overlaps(new Rectangle(x, y, GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4))){
                     handleNextLevel(stage, newLocX, newLocY);
+                    fadeInTransition = new FadeInTransition(gameScreen.getCamera());
+                }
                 player.setOpenDoor(false);
             }
         }
@@ -80,7 +81,7 @@ public class StageHandler {
 
     private void handleTransition(float deltaTime){
         if(fadeInTransition != null)
-            if(!fadeInTransition.isTransistionDone()){
+            if(!fadeInTransition.isTransitionDone()){
                 fadeInTransition.update(deltaTime);
             }else{
                 fadeInTransition = null;
