@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" nextobjectid="43">
+ <tileset firstgid="1" name="floor" tilewidth="16" tileheight="16" tilecount="18" columns="6">
+  <image source="platform.png" width="96" height="48"/>
+ </tileset>
+ <tileset firstgid="19" name="locker" tilewidth="16" tileheight="16" tilecount="8" columns="2">
+  <image source="locker.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="27" name="wood_flooring" tilewidth="16" tileheight="16" tilecount="18" columns="6">
+  <image source="wood_flooring.png" width="96" height="48"/>
+ </tileset>
+ <tileset firstgid="45" name="class_door" tilewidth="16" tileheight="16" tilecount="8" columns="2">
+  <image source="class_door.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="53" name="table" tilewidth="16" tileheight="16" tilecount="10" columns="5">
+  <image source="table.png" width="80" height="32"/>
+ </tileset>
+ <tileset firstgid="63" name="stacked_paper" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="stacked_paper.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="64" name="banner" tilewidth="16" tileheight="16" tilecount="80" columns="8">
+  <image source="banner.png" width="128" height="160"/>
+ </tileset>
+ <layer name="Platform" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztyTkSg0AAA8H9Bwab01z/fx/KtzYm6a6aRCoFAAAAAAAAAIA3demT+jSkb/rZq731j2lKc1rSmjZ7tbf+f9rTkc50pdte7a3/AQdeIT0=
+  </data>
+ </layer>
+ <layer name="Hidden" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20Hb6AAAAAAAAAAAAB4DCWAAAE=
+  </data>
+ </layer>
+ <layer name="Background" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztztEJwCAMQMEspLXq/rM1S5QQuIP3/yIAAAAAAAAA+MPIZvVEY0+2qicae7NdPdHYyW71BNDCBzo3AYU=
+  </data>
+ </layer>
+ <layer name="Furniture" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztztkJgDAQRdH04G4frlH7L8uXAvIRmAwo98Bl/h4TAgAAAAAAAAAAAAD8X6Nah2v9R8lWTZ3qHa71HyVbNQ1qdLjWfySLWtWmdnVktmqa1Oxwrf9IThXVpW71ZLYAfNcLyA4RBA==
+  </data>
+ </layer>
+ <layer name="Climbable" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20Hb6AAAAAAAAAAAAB4DCWAAAE=
+  </data>
+ </layer>
+ <objectgroup name="Door">
+  <properties>
+   <property name="LocationX" value="48"/>
+   <property name="LocationY" value="26"/>
+   <property name="Opens" value="level2.tmx"/>
+  </properties>
+  <object id="21" x="832" y="368" width="32" height="64">
+   <properties>
+    <property name="locationX" value="26"/>
+    <property name="locationY" value="3"/>
+    <property name="open" value="level2.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Stacked Paper">
+  <object id="32" gid="63" x="1136" y="384" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="Desk"/>
+ <objectgroup name="NPC">
+  <object id="40" x="976" y="416" width="16" height="16">
+   <properties>
+    <property name="type" value="waiting"/>
+   </properties>
+  </object>
+  <object id="42" x="1232" y="416" width="16" height="16">
+   <properties>
+    <property name="type" value="following"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="16" tileheight="16" nextobjectid="43">
+ <tileset firstgid="1" name="floor" tilewidth="16" tileheight="16" tilecount="18" columns="6">
+  <image source="platform.png" width="96" height="48"/>
+ </tileset>
+ <tileset firstgid="19" name="locker" tilewidth="16" tileheight="16" tilecount="8" columns="2">
+  <image source="locker.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="27" name="wood_flooring" tilewidth="16" tileheight="16" tilecount="18" columns="6">
+  <image source="wood_flooring.png" width="96" height="48"/>
+ </tileset>
+ <tileset firstgid="45" name="class_door" tilewidth="16" tileheight="16" tilecount="8" columns="2">
+  <image source="class_door.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="53" name="desk" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="desk.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="54" name="table" tilewidth="16" tileheight="16" tilecount="10" columns="5">
+  <image source="table.png" width="80" height="32"/>
+ </tileset>
+ <tileset firstgid="64" name="grey_blank" tilewidth="16" tileheight="16" tilecount="4" columns="2">
+  <image source="grey_blank.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="68" name="banner" tilewidth="16" tileheight="16" tilecount="80" columns="8">
+  <image source="banner.png" width="128" height="160"/>
+ </tileset>
+ <tileset firstgid="148" name="library_pack" tilewidth="16" tileheight="16" tilecount="35" columns="5">
+  <image source="library_pack.png" width="80" height="112"/>
+ </tileset>
+ <tileset firstgid="183" name="wood_flooring_light" tilewidth="16" tileheight="16" tilecount="18" columns="6">
+  <image source="wood_flooring_light.png" width="96" height="48"/>
+ </tileset>
+ <layer name="Background" width="150" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1+EKgjAUgNE9m++nVk/c/gQhXlYzmm7nwgEtpRgfQ6eU0nRxc7Zka3bL7tmj8Pn7d9vz6NroeHtP6/Xg/13Nab+rpXD9srlXV/37tqu9vSfag6Kuog511Y+artbgOOpNV+P5ZVefPG/t3aOr/hzpKtp7Suev39BVv2reB0vP7LriaFfR87quxnakq+07n67QFWfvau+6Wq3Xg3pnntZrAwAAAFdXM63/MwAAAAAwJmOMMWbkeQIhG34R
+  </data>
+ </layer>
+ <layer name="Platform" width="150" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt17FtAkEQhtEr5QqgAwLKBgMGgwG7LP8hwUkEMLes9Z70JSuxc1pNwjD0b9n6A+6sWn8AL2OvqGCvqGCvqGCvqGCvqGCv+O/sFRXsFRXsFRXsVd/GiRYPmus3AAAAwHPGifwfBwAAAADe0Tpt0kfapl3ad3g+x5zKGa3er+rez3RIx/SVTunc4fkccypntHq/qnu/0yVd0y39pN8Oz+eYUzmj1ftV3fsHYG5c8g==
+  </data>
+ </layer>
+ <layer name="Hidden" width="150" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2DEOwyAMBVCORun971SGRKUUzMQQ9J5kKbLjLHwxJKXne9XKtUqt9/V8Vzub9aOd2Sx6nzP051rSN0ftbNaPdlbfG73PGXL6z0F/z5SgH+2sZqMeZ7jvjVEO2tmsH+2sZqMeZ5ArdpArdpArdpArdpArdijpNzf9mffzvh/trGajHmfIyf8rAAAAAAAAAAAAAICn+wBAjWVU
+  </data>
+ </layer>
+ <layer name="Furniture" width="150" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2sduhDAUhWG/UHpILy856b03pSjl/XKQWBCPzZjhIgj6P+kskMtcW2PY2DkAAAAAAADkZrsuAIM033UBGKRFo3lWlFVlTVlXNozmxf+0bDTPprKlbCs7yq7RvAAAAAAAAAAA9NGesq8cKIeB5wvlUrlSrosxoyIW49us08Kk+v32uv2H6lg5UU6Vs4Tn3FERi/Ft1mkhNG/+H0ldv3PV+zVUk85b6HydF7EY32adFmLvn9T1O1e9X30z42zuSvnnx/++hM7XTRGL8X5/yzotxN5Xo0h73f59M+fS70o9Kk/Ks/Litfnnx1936HyV3+tNx4f2OVTvNL9joe766/bvmwU3flcqdufpVXlT3pUPb0zX38FQe6jeab+DVffAUu6INV1/ynr7ZMmN35WK3Xn6VL6Ub+XHG3Or3Cn3ykPCc678HbMeH6u37u9kpT3Jij3J3N97YLG2rNSn6fpT1gsAAKr9AjYmKcE=
+  </data>
+ </layer>
+ <layer name="Climbable" width="150" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt0kVOBkAQBeH/cLi7u7u7uzsXpi4AC5KmmaQq+ZaTXsyrVL6vCtWoQS3qUI8GNP7w7jf95S3LrQnNaEEr2tCODnQWfMty60I3etCLPvRjAIMF37LchjCMEYxiDOOYwGTBtyy3KUxjBrOYwzwWsFjwLcttCctYwSrWsI4NbBZ8y3LbwjZ2sIs97OMAhwXfstyOcIwTnOIM57jAZcG3LLcrXOMGt7jDPR7wWPAty+0Jz3jBK97wjg98FnzLcnNXFpG7sojclUXkriwid2URuSuLyF1ZRO7KInJXFpG7soj8a4vIXVlE7soiclcWkbuyiNyVmZmZmdn/6AudTLfJ
+  </data>
+ </layer>
+ <objectgroup name="Stacked Paper"/>
+ <objectgroup name="Door">
+  <object id="34" x="416" y="368" width="32" height="64">
+   <properties>
+    <property name="locationX" value="52"/>
+    <property name="locationY" value="3"/>
+    <property name="open" value="level1.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Desk">
+  <object id="29" gid="53" x="32" y="416" width="16" height="16"/>
+  <object id="32" gid="53" x="64" y="416" width="16" height="16"/>
+  <object id="33" gid="53" x="96" y="416" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="NPC">
+  <object id="38" x="1216" y="160" width="16" height="16">
+   <properties>
+    <property name="type" value="waiting"/>
+   </properties>
+  </object>
+  <object id="42" x="352" y="416" width="16" height="16">
+   <properties>
+    <property name="type" value="enemy"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

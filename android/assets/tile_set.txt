@@ -1,0 +1,61 @@
+tile_set.png
+size: 102, 149
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+black_blank
+  rotate: false
+  xy: 1, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+flooring
+  rotate: false
+  xy: 35, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+full_grey_wall
+  rotate: false
+  xy: 69, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+grey_blank
+  rotate: false
+  xy: 1, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+grey_wall
+  rotate: false
+  xy: 35, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+half_grey_wall
+  rotate: false
+  xy: 1, 119
+  size: 32, 29
+  orig: 32, 32
+  offset: 0, 3
+  index: -1
+light_brown_blank
+  rotate: false
+  xy: 69, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+platform
+  rotate: false
+  xy: 1, 1
+  size: 96, 48
+  orig: 96, 48
+  offset: 0, 0
+  index: -1
