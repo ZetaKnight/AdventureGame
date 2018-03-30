@@ -1,6 +1,7 @@
 package com.mygdx.game.pete.platformer.Handlers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.maps.MapLayer;
@@ -27,12 +28,17 @@ public class StageHandler {
     private long currentTime = millis();
     private long unfreezePlayerControlsAndAnimationTime;
     private FadeInTransition fadeInTransition;
+    private Sound doorOpen;
 
-    public StageHandler(GameScreen gameScreen, Player player, PetePlatformer petePlatformer) {
+    public StageHandler(
+            GameScreen gameScreen, Player player, PetePlatformer petePlatformer)
+    {
         this.gameScreen = gameScreen;
         this.player = player;
         this.petePlatformer = petePlatformer;
         fadeInTransition = null;
+        doorOpen = petePlatformer.getAssetManager()
+                .get("open_interior_wood_door.mp3",Sound.class);
     }
 
     public void update(float deltaTime){
@@ -54,7 +60,9 @@ public class StageHandler {
                 float x = (object.getProperties().get("x", Float.class));
                 float y = (object.getProperties().get("y", Float.class));
                 String stage = String.valueOf(object.getProperties().get("open"));
-                if(player.getCollisionRect().overlaps(new Rectangle(x, y, GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4))){
+                if(player.getCollisionRect()
+                        .overlaps(new Rectangle(x, y,
+                                GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4))){
                     handleNextLevel(stage, newLocX, newLocY);
                     fadeInTransition = new FadeInTransition(gameScreen.getCamera());
                 }
@@ -74,9 +82,7 @@ public class StageHandler {
         player.setPosition(16 * x, 16 * y);
         gameScreen.populateNPCs();
         gameScreen.populateStackedPaper();
-        Gdx.gl.glClearColor(Color.LIGHT_GRAY.r, Color.LIGHT_GRAY.g,
-                Color.LIGHT_GRAY.b, Color.LIGHT_GRAY.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        doorOpen.play();
     }
 
     private void handleTransition(float deltaTime){

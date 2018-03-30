@@ -55,6 +55,7 @@ public class LoadingScreen extends ScreenAdapter {
         petePlatformer.getAssetManager().load(com.mygdx.game.pete.platformer.Entities.PaperBall.PAPER_BALL_BANG, Texture.class);
         petePlatformer.getAssetManager().load("jump2.wav", Sound.class);
         petePlatformer.getAssetManager().load("sacorn.wav", Sound.class);
+        petePlatformer.getAssetManager().load("open_interior_wood_door.mp3", Sound.class);
         petePlatformer.getAssetManager().load("peteTheme.mp3", Music.class);
 
         petePlatformer.getAssetManager().finishLoading();

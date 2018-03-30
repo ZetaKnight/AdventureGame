@@ -28,7 +28,6 @@ public class FadeInTransition {
     public void update(float deltaTime){
         alpha -= deltaTime *1;
         draw();
-        System.out.println("Current deltaTime: " + deltaTime + ", Current alpha value: " + alpha);
     }
 
     private void draw(){

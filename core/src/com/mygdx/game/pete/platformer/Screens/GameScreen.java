@@ -81,12 +81,15 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update(float delta){
-        player.update(delta);
-//        handlePlayerOnClimbable();
-        for(NPC_1 npc: npcs){
-            npc.update(delta);
+        if(Player.DOOR_ENTRY.UNFROZEN == player.door_entry){
+            player.update(delta);
+            for(NPC_1 npc: npcs){
+                npc.update(delta);
+            }
+
         }
-//        npc_1.update(delta);
+
+
         updateCamera();
         stopPeteLeaveScreen();
         handlePeteCollision();
@@ -98,7 +101,6 @@ public class GameScreen extends ScreenAdapter {
         handlePaperBallThrow();
         handlePaperBall(delta);
         stageHandler.update(delta);
-//        handleDoorOpening();
     }
 
     private void updateCamera(){
