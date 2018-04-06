@@ -1,5 +1,6 @@
 package com.mygdx.game.pete.platformer.Screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.pete.platformer.CollisionCell;
+import com.mygdx.game.pete.platformer.Controllers.OnScreenController;
 import com.mygdx.game.pete.platformer.Entities.*;
 import com.mygdx.game.pete.platformer.HUD;
 import com.mygdx.game.pete.platformer.Handlers.StageHandler;
@@ -37,14 +38,13 @@ import java.util.Iterator;
 public class GameScreen extends ScreenAdapter {
     public static final int  HEIGHT = 240, WIDTH = 480;// HEIGHT = 480, WIDTH = 640;
     public static final int CELL_SIZE = 16;
-    public static final String PLATFORM = "Platform";
-    public static final String FURNITURE = "Furniture";
-    public static final String STACKED_PAPER = "Stacked Paper";
-    public static final String HIDDEN = "Hidden";
-    public static final String BACKGROUND = "Background";
-    public static final String DOOR = "Door";
-    public static final String CLIMBABLE = "Climbable";
-    public static final String NPC = "NPC";
+    private static final String PLATFORM = "Platform";
+    private static final String FURNITURE = "Furniture";
+    private static final String STACKED_PAPER = "Stacked Paper";
+    private static final String HIDDEN = "Hidden";
+    private static final String BACKGROUND = "Background";
+    private static final String NPC = "NPC";
+    private static final String CLIMBABLE = "Climbable";
 
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
@@ -60,7 +60,7 @@ public class GameScreen extends ScreenAdapter {
     private TiledMapTileLayer hiddenLayer;
     private Array<PaperBall> paperBalls = new Array<PaperBall>();
     private Array<NPC_1> npcs = new Array<NPC_1>();
-    private NPC_1 npc_1;//useless, get rid of!!
+    private OnScreenController onScreenController;
 
     /*
     * component handlers
@@ -88,7 +88,6 @@ public class GameScreen extends ScreenAdapter {
             }
 
         }
-
 
         updateCamera();
         stopPeteLeaveScreen();
@@ -173,7 +172,10 @@ public class GameScreen extends ScreenAdapter {
         drawPaperBallsThrown();
         drawStackPaper();
         orthogonalTiledMapRenderer.renderTileLayer(hiddenLayer);
+
         hud.draw(batch);
+        if(Gdx.app.getType() == ApplicationType.Android)
+            onScreenController.draw();
         batch.end();
         stageHandler.draw(deltaTime);
     }
@@ -218,13 +220,17 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         tiledMap = petePlatformer.getAssetManager().get("level1.tmx");
-        orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
+        orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer
+                (tiledMap, batch);
         orthogonalTiledMapRenderer.setView(camera);
-        player = new Player(petePlatformer.getAssetManager().get(Player.CHARACTER, Texture.class),
-                petePlatformer.getAssetManager().get("jump2.wav", Sound.class),batch, this);
+        onScreenController = new OnScreenController
+                (this, batch);
+        player = new Player(petePlatformer.getAssetManager()
+                .get(Player.CHARACTER, Texture.class), petePlatformer.getAssetManager()
+                .get("jump2.wav", Sound.class),batch, this);
         populateNPCs();
         petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).setLooping(true);
-        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
+//        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
         populateStackedPaper();
         hud = new HUD(this);
 
@@ -391,10 +397,9 @@ public class GameScreen extends ScreenAdapter {
             float x = (object.getProperties().get("x", Float.class));
             float y = (object.getProperties().get("y", Float.class));
             String type = object.getProperties().get("type", String.class);
-            npcs.add(new NPC_1(petePlatformer.getAssetManager().get(NPC_1.CHARACTER, Texture.class),
-                    petePlatformer.getAssetManager().get("jump2.wav", Sound.class),
-                    batch,
-                    x, y, player, type));
+            npcs.add(new NPC_1(petePlatformer.getAssetManager()
+                .get(NPC_1.CHARACTER, Texture.class),petePlatformer.getAssetManager()
+                .get("jump2.wav", Sound.class),batch,x, y, player, type));
         }
     }
 
@@ -414,6 +419,7 @@ public class GameScreen extends ScreenAdapter {
             if (player.getCollisionRect().overlaps(stackedPaper.getCollision())) {
                 petePlatformer.getAssetManager().get("sacorn.wav", Sound.class).play();
                 iter.remove();
+                player.addPaperBall();
                 hud.incrementScore();
             }
         }
@@ -421,20 +427,21 @@ public class GameScreen extends ScreenAdapter {
 
     // handles which way a ball is thrown
     public void handlePaperBallThrow(){
-        if(player.isThrowPaperBallLeft()){
+        if(player.isThrowPaperBallLeft() && player.getPaperBallsAmaount() > 0){
             paperBalls.add( new PaperBall(batch,
                     petePlatformer.getAssetManager().get(PaperBall.PAPER_BALL, Texture.class),
                     player.getX(),
                     player.getY()+(Player.HEIGHT*.75f), -7,0));
             player.setThrowPaperBallLeft(false);
-        }else if(player.isThrowPaperBallRight()){
+            player.decreasePaperBall();
+        }else if(player.isThrowPaperBallRight() && player.getPaperBallsAmaount() > 0){
             paperBalls.add( new PaperBall(batch,
                             petePlatformer.getAssetManager().get(PaperBall.PAPER_BALL, Texture.class),
                             player.getX()+ Player.WIDTH,
                             player.getY()+(Player.HEIGHT*.75f), 7, 0));
             player.setThrowPaperBallRight(false);
+            player.decreasePaperBall();
         }
-
     }
 
     //handles paper balls positions and collisions
@@ -554,5 +561,9 @@ public class GameScreen extends ScreenAdapter {
 
     public Camera getCamera(){
         return this.camera;
+    }
+
+    public OnScreenController getOnScreenController() {
+        return onScreenController;
     }
 }

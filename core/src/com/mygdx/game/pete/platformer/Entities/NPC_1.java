@@ -14,7 +14,6 @@ public class NPC_1 {
     public enum State{STANDING, WALKING, SITTING}
     public enum Type{ENEMY, FOLLOWING, WAITING};
     public static final String CHARACTER = "npc-1_animation.png";
-    public static final int ANIMATION_TIMER = 250;
     public static final int WIDTH = 32;
     public static final int HEIGHT = 32;
     private static final float MAX_SPEED_X = 3;
@@ -31,7 +30,6 @@ public class NPC_1 {
     private TextureRegion standing;
     private TextureRegion toDraw;
     private boolean hit = false;
-    private long timer = ATTACK_TIMER;
     private Sound sound;
     private Player player;
     private float animationTimer = 0;
@@ -39,14 +37,7 @@ public class NPC_1 {
     private State currentState;
     private State previousState;
     public boolean die = false;
-
-
-    /*
-    testing attack method
-     */
-    private long currentTime = com.badlogic.gdx.utils.TimeUtils.millis();
-    private long attackTime = currentTime;
-    private boolean attackTimeSet = false;
+    private float timer = 1;
 
     public NPC_1(Texture texture, Sound sound, Batch batch, float x,float y, Player player, String type){
         this.player = player;
@@ -84,8 +75,6 @@ public class NPC_1 {
 
         animationTimer +=delta;
 
-        currentTime = com.badlogic.gdx.utils.TimeUtils.millis();
-
         if(hit) currentState = State.SITTING;
 
         if(npcType == Type.FOLLOWING && currentState != State.SITTING)
@@ -104,38 +93,16 @@ public class NPC_1 {
         }
 
         if(npcType == Type.ENEMY && currentState != State.SITTING){
-            if((this.x < player.getX() && this.x > player.getX()-RADIUS+48) || (this.x > player.getX() && this.x < player.getX()+(RADIUS-48))) {
+            if((this.x < player.getX() && this.x > player.getX()-RADIUS+48) ||
+                (this.x > player.getX() && this.x < player.getX()+(RADIUS-48))) {
                 xSpeed = 0;
+                attackPlayer(delta);
             }else{
                 if (player.getX() < this.x) xSpeed = -MAX_SPEED_X;
                 else if (player.getX() > this.x) xSpeed = MAX_SPEED_X;
 
                 ySpeed = -MAX_SPEED_Y;
             }
-            /*
-            old method of attack timer
-
-            if(player.getCollisionRect().overlaps(collisionRect)){
-                timer -= delta;
-                if(player.getHealth() > 0 && timer <= 0){
-                    player.deductHealth();
-                    System.out.println(player.getHealth());
-                    timer = ATTACK_TIMER;
-                }
-            }
-            */
-//            if(player.getCollisionRect().overlaps(collisionRect)){
-//                if(!attackTimeSet){
-//                    attackTimeSet = true;
-//                    attackTime = currentTime + (1000 * 3);
-//                }
-//                if(player.getHealth() > 0 && attackTime <= currentTime){
-//                    player.deductHealth();
-//                    System.out.println(player.getHealth());
-//                    attackTimeSet = false;
-//                }
-//            }
-
         }
 
         x += xSpeed;
@@ -145,6 +112,14 @@ public class NPC_1 {
 
     private void updateCollisionRectangle(){
         collisionRect.setPosition(x, y);
+    }
+
+    private void attackPlayer(float deltaTime){
+        timer -=deltaTime;
+        if(timer <= 0) {
+            player.deductHealth();
+            timer = 1;
+        }
     }
 
     public void draw(){

@@ -59,7 +59,7 @@
  <objectgroup name="Door">
   <object id="34" x="416" y="368" width="32" height="64">
    <properties>
-    <property name="locationX" value="52"/>
+    <property name="locationX" value="41"/>
     <property name="locationY" value="3"/>
     <property name="open" value="level1.tmx"/>
    </properties>

@@ -1,5 +1,6 @@
 package com.mygdx.game.pete.platformer.Entities;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -13,7 +14,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.pete.platformer.CollisionCell;
+import com.mygdx.game.pete.platformer.Controllers.OnScreenController;
 import com.mygdx.game.pete.platformer.Screens.GameScreen;
+import com.badlogic.gdx.Application.ApplicationType;
 
 /**
  * Created by Amar on 22/08/2017.
@@ -28,7 +31,7 @@ public class Player {
     public enum Dir{WALKING_LEFT,WALKING_RIGHT}
     public Dir direction;
     private final Rectangle collisionRect = new Rectangle(0,0,WIDTH,HEIGHT);
-    private float x = 48;
+    private float x = 64;
     private float y = 48;
     private float xSpeed = 0;
     private float ySpeed = 0;
@@ -51,12 +54,13 @@ public class Player {
     private Batch batch;
     private boolean throwPaperBallRight = false, throwPaperBallLeft = false;
     private int health;
-
+    private int paperBallsAmount = 0;
     private GameScreen gameScreen;
-
+    private OnScreenController onScreenController;
 
     public Player(Texture texture, Sound jumpSound, Batch batch, GameScreen gameScreen){
         this.gameScreen = gameScreen;
+        this.onScreenController = gameScreen.getOnScreenController();
         this.batch = batch;
         this.jumpSound = jumpSound;
         TextureRegion[] regions = TextureRegion.split(texture, WIDTH,HEIGHT)[0];
@@ -79,57 +83,40 @@ public class Player {
 
     public void update(float delta){
         animationTimer +=delta;
-        Input input = Gdx.input;
         if (health > 0) {
-            controlInput(input);
+            if(Gdx.app.getType() == ApplicationType.Android)
+                controlOnscreenInput();
+            else
+                controlInput();
+        }else{
+            deathSequence();
         }
         x += xSpeed;
         y += ySpeed;
         updateCollisionRectangle();
     }
 
-    private void controlInput(Input input){
-        if (input.isKeyPressed(Input.Keys.RIGHT) ||
-                (input.isTouched() && input.getX() > (Gdx.graphics.getWidth() / 2)) &&
-                        input.getY() > 100) {
+    private void controlOnscreenInput(){
+        if(onScreenController.getRightPressed()){
             moveRight();
-        } else if (input.isKeyPressed(Input.Keys.LEFT) ||
-                (input.isTouched() && input.getX() < (Gdx.graphics.getWidth() / 2)) &&
-                        input.getY() > 100) {
+        }else if(onScreenController.getLeftPressed()){
             moveLeft();
-        } else {
+        }else{
             xSpeed = 0;
         }
-        if (input.isKeyPressed(Input.Keys.UP)){
-            onClimbable = handlePlayerOnClimbable();
-            isClimbing = onClimbable;
+        if(onScreenController.getAttackPressed()){
+            if (toDraw.isFlipX()) {
+                setThrowPaperBallLeft(true);
+            } else if (!toDraw.isFlipX()) {
+                setThrowPaperBallRight(true);
+            }
         }
-        if (onClimbable && isClimbing) {
-            onClimbable = handlePlayerOnClimbable();
-            isClimbing = onClimbable;
-            if (input.isKeyPressed(Input.Keys.RIGHT))
-                xSpeed = MAX_X_SPEED;
-
-            else if (input.isKeyPressed(Input.Keys.LEFT))
-                xSpeed = -MAX_X_SPEED;
-
-            if (input.isKeyPressed(Input.Keys.DOWN))
-                ySpeed = -MAX_Y_SPEED;
-
-            else if (input.isKeyPressed(Input.Keys.UP))
-                ySpeed = MAX_Y_SPEED;
-
-            else ySpeed = 0;
-
-            if (input.isKeyPressed(Input.Keys.A)) isClimbing = false;
-        } else if ((input.isKeyPressed(Input.Keys.A) ||
-                (input.isTouched() && input.getY() < 150))
-                && !blockJump) {
-            if (ySpeed != MAX_Y_SPEED) jumpSound.play();
-            //Build climbing function --------------------------------
-            ySpeed = MAX_Y_SPEED;
-            jumpYDistance += ySpeed;
-            blockJump = jumpYDistance > MAX_JUMP_DISTANCE;
+        if (onScreenController.getUpPressed() &&
+                door_entry == DOOR_ENTRY.UNFROZEN) {
+            setOpenDoor(true);
+        }
+        if (!blockJump && onScreenController.getUpPressed()) {
+            jump();
         } else {
             // if not falling
             if (!onLand) {
@@ -141,19 +128,35 @@ public class Player {
                 blockJump = jumpYDistance > 0;
             }
         }
-        //If player is positioned at door, flag open door
-        if (input.isKeyPressed(Input.Keys.SPACE) && door_entry == DOOR_ENTRY.UNFROZEN) {
+    }
+
+    private void controlInput(){
+        Input input = Gdx.input;
+        controlLeftAndRightInput(input);
+        controlUpInput(input);
+        if (input.isKeyPressed(Input.Keys.SPACE) &&
+                door_entry == DOOR_ENTRY.UNFROZEN ||
+                ((input.isTouched() && input.getY() < 150) &&
+                door_entry == DOOR_ENTRY.UNFROZEN)) {
             setOpenDoor(true);
         }
         if (input.isKeyJustPressed(Input.Keys.S)) {
-            //shoot
             if (toDraw.isFlipX()) {
                 setThrowPaperBallLeft(true);
             } else if (!toDraw.isFlipX()) {
                 setThrowPaperBallRight(true);
             }
         }
+    }
 
+    private void controlLeftAndRightInput(Input input){
+        if (input.isKeyPressed(Input.Keys.RIGHT)) {
+            moveRight();
+        } else if (input.isKeyPressed(Input.Keys.LEFT)) {
+            moveLeft();
+        } else {
+            xSpeed = 0;
+        }
     }
 
     private void moveRight(){
@@ -166,7 +169,33 @@ public class Player {
         xSpeed = -MAX_X_SPEED;
     }
 
-    public boolean handlePlayerOnClimbable(){
+    private void controlUpInput(Input input){
+        if (input.isKeyPressed(Input.Keys.UP)){
+            tryClimbing();
+        }
+        if (canClimb()) {
+            climbInDirection(input);
+        } else if (canJump(input)) {
+            jump();
+        } else {
+            // if not falling
+            if (!onLand) {
+                ySpeed = -MAX_Y_SPEED;
+                blockJump = jumpYDistance > 0;
+            } else {
+                // if in the air
+                ySpeed = -2;
+                blockJump = jumpYDistance > 0;
+            }
+        }
+    }
+
+    private void tryClimbing(){
+        onClimbable = handlePlayerOnClimbable();
+        isClimbing = onClimbable;
+    }
+
+    private boolean handlePlayerOnClimbable(){
         float x = this.getX();
         float y = this.getY();
 
@@ -176,21 +205,55 @@ public class Player {
         int bottomLCellX = MathUtils.floor(cellX);
         int bottomLCellY = MathUtils.floor(cellY);
         Array<CollisionCell> cellsCovered = new Array<CollisionCell>();
-        TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) gameScreen.getTiledMap().getLayers().get(GameScreen.CLIMBABLE);
-        cellsCovered.add(new CollisionCell(tiledMapTileLayer.getCell(bottomLCellX, bottomLCellY), bottomLCellX, bottomLCellY));
+        TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) gameScreen
+                .getTiledMap().getLayers()
+                .get("Climbable");
+        cellsCovered.add(new CollisionCell(tiledMapTileLayer.getCell(
+                bottomLCellX, bottomLCellY),
+                bottomLCellX, bottomLCellY));
         cellsCovered = gameScreen.filterOutNonTiledCells(cellsCovered);
 
         return (cellsCovered.size>0) ? true : false;
     }
 
+    private boolean canClimb(){
+        return onClimbable && isClimbing;
+    }
+
+    private void climbInDirection(Input input){
+        tryClimbing();
+        if (input.isKeyPressed(Input.Keys.RIGHT))
+            xSpeed = MAX_X_SPEED;
+        else if (input.isKeyPressed(Input.Keys.LEFT))
+            xSpeed = -MAX_X_SPEED;
+        if (input.isKeyPressed(Input.Keys.DOWN))
+            ySpeed = -MAX_Y_SPEED;
+        else if (input.isKeyPressed(Input.Keys.UP))
+            ySpeed = MAX_Y_SPEED;
+        else ySpeed = 0;
+
+        if (input.isKeyPressed(Input.Keys.A))
+            isClimbing = false;
+    }
+
+    private boolean canJump(Input input){
+        return (input.isKeyPressed(Input.Keys.A) ) && !blockJump;
+    }
+
+    private void jump(){
+        if (ySpeed != MAX_Y_SPEED) jumpSound.play();
+        ySpeed = MAX_Y_SPEED;
+        jumpYDistance += ySpeed;
+        blockJump = jumpYDistance > MAX_JUMP_DISTANCE;
+    }
+
     public void draw(){
         toDraw = standing.getKeyFrame(animationTimer);
-        if(isClimbing && (xSpeed != 0 || ySpeed != 0)) {
+        if(isClimbing && isMoving()) {
             toDraw = climbing.getKeyFrame(animationTimer);
         }else if(isClimbing){
             toDraw = climbedOn;
         }else {
-
             if (xSpeed != 0) {
                 toDraw = walking.getKeyFrame(animationTimer);
             }
@@ -199,7 +262,6 @@ public class Player {
             } else if (ySpeed < 0) {
                 toDraw = jumpDown;
             }
-
             //  if facing left
             if (xSpeed < 0 || direction == Dir.WALKING_LEFT) {
                 if (!toDraw.isFlipX()) toDraw.flip(true, false);
@@ -207,11 +269,12 @@ public class Player {
             } else if (xSpeed > 0 || direction == Dir.WALKING_RIGHT) {
                 if (toDraw.isFlipX()) toDraw.flip(true, false);
             }
-
         }
-
         batch.draw(toDraw, x, y);
+    }
 
+    private boolean isMoving(){
+        return (xSpeed != 0 || ySpeed != 0);
     }
 
     public void drawDebug(ShapeRenderer shapeRenderer){
@@ -220,6 +283,10 @@ public class Player {
 
     private void updateCollisionRectangle(){
         collisionRect.setPosition(x, y);
+    }
+
+    private void deathSequence(){
+
     }
 
     public void setPosition(float x, float y){
@@ -296,5 +363,17 @@ public class Player {
 
     public void deductHealth(){
         this.health--;
+    }
+
+    public void addPaperBall(){
+        paperBallsAmount++;
+    }
+
+    public int getPaperBallsAmaount(){
+        return paperBallsAmount;
+    }
+
+    public void decreasePaperBall(){
+        paperBallsAmount--;
     }
 }

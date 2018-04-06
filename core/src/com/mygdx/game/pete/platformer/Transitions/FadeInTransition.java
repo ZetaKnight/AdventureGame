@@ -35,7 +35,7 @@ public class FadeInTransition {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(0, 0, 0, alpha));
+        shapeRenderer.setColor(new Color(1, 0, 0, alpha));
         shapeRenderer.rect(
                 camera.position.x - (GameScreen.WIDTH/2),
                 camera.position.y - (GameScreen.HEIGHT/2),
