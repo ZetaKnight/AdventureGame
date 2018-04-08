@@ -333,7 +333,7 @@ public class Player {
         this.openDoor = openDoor;
     }
 
-    public boolean isThrowPaperBallRight() {
+    public boolean hasThrownPaperBallRight() {
         return throwPaperBallRight;
     }
 
@@ -341,7 +341,7 @@ public class Player {
         this.throwPaperBallRight = throwPaperBallRight;
     }
 
-    public boolean isThrowPaperBallLeft() {
+    public boolean hasThrownPaperBallLeft() {
         return throwPaperBallLeft;
     }
 
@@ -369,7 +369,7 @@ public class Player {
         paperBallsAmount++;
     }
 
-    public int getPaperBallsAmaount(){
+    public int getPaperBallsAmount(){
         return paperBallsAmount;
     }
 

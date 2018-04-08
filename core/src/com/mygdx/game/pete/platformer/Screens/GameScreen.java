@@ -427,20 +427,24 @@ public class GameScreen extends ScreenAdapter {
 
     // handles which way a ball is thrown
     public void handlePaperBallThrow(){
-        if(player.isThrowPaperBallLeft() && player.getPaperBallsAmaount() > 0){
-            paperBalls.add( new PaperBall(batch,
-                    petePlatformer.getAssetManager().get(PaperBall.PAPER_BALL, Texture.class),
-                    player.getX(),
-                    player.getY()+(Player.HEIGHT*.75f), -7,0));
-            player.setThrowPaperBallLeft(false);
-            player.decreasePaperBall();
-        }else if(player.isThrowPaperBallRight() && player.getPaperBallsAmaount() > 0){
-            paperBalls.add( new PaperBall(batch,
-                            petePlatformer.getAssetManager().get(PaperBall.PAPER_BALL, Texture.class),
-                            player.getX()+ Player.WIDTH,
-                            player.getY()+(Player.HEIGHT*.75f), 7, 0));
-            player.setThrowPaperBallRight(false);
-            player.decreasePaperBall();
+        if(player.getPaperBallsAmount() > 0) {
+            if (player.hasThrownPaperBallLeft()) {
+                player.setThrowPaperBallLeft(false);
+                player.decreasePaperBall();
+                paperBalls.add(new PaperBall(batch,
+                        petePlatformer.getAssetManager()
+                                .get(PaperBall.PAPER_BALL, Texture.class),
+                        player.getX(), player.getY() + (Player.HEIGHT * .75f),
+                        -7, 0));
+            } else if (player.hasThrownPaperBallRight()) {
+                player.setThrowPaperBallRight(false);
+                player.decreasePaperBall();
+                paperBalls.add(new PaperBall(batch,
+                        petePlatformer.getAssetManager().get(PaperBall.PAPER_BALL, Texture.class),
+                        player.getX() + Player.WIDTH,
+                        player.getY() + (Player.HEIGHT * .75f), 7, 0));
+
+            }
         }
     }
 
@@ -506,30 +510,6 @@ public class GameScreen extends ScreenAdapter {
         }
 
         return cellsCovered;
-    }
-
-    /**
-     * @deprecated - This method should not be used. See Player.java handlePlayerOnClimbable()
-     */
-    @Deprecated
-    public void handlePlayerOnClimbable(){
-        float x = player.getX();
-        float y = player.getY();
-
-        float cellX = x/CELL_SIZE;
-        float cellY = y/CELL_SIZE;
-
-        int bottomLCellX = MathUtils.floor(cellX);
-        int bottomLCellY = MathUtils.floor(cellY);
-        Array<CollisionCell> cellsCovered = new Array<CollisionCell>();
-        TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) tiledMap.getLayers().get(CLIMBABLE);
-        cellsCovered.add(new CollisionCell(tiledMapTileLayer.getCell(bottomLCellX, bottomLCellY), bottomLCellX, bottomLCellY));
-        cellsCovered = filterOutNonTiledCells(cellsCovered);
-        if(cellsCovered.size>0) player.setOnClimbable(true);
-        else{
-            player.setOnClimbable(false);
-            player.setIsClimbing(false);
-        }
     }
 
     public Viewport getViewport() {
