@@ -93,8 +93,9 @@ public class NPC_1 {
         }
 
         if(npcType == Type.ENEMY && currentState != State.SITTING){
-            if((this.x < player.getX() && this.x > player.getX()-RADIUS+48) ||
-                (this.x > player.getX() && this.x < player.getX()+(RADIUS-48))) {
+            if(((this.x < player.getX() && this.x > player.getX()-RADIUS+48) ||
+                (this.x > player.getX() && this.x < player.getX()+(RADIUS-48)))
+                && this.y > player.getY()  && this.y < player.getY()+16) {
                 xSpeed = 0;
                 attackPlayer(delta);
             }else{
@@ -143,6 +144,14 @@ public class NPC_1 {
         }
 
         batch.draw(toDraw, x, y);
+    }
+
+    private boolean animationTimerSetZero = false;
+    private void initiateAnimationTimerToZeroOnce(){
+        if(!animationTimerSetZero){
+            animationTimerSetZero = true;
+            animationTimer = 0;
+        }
     }
 
     public float getY() {

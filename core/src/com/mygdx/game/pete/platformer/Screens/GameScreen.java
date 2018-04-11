@@ -178,6 +178,7 @@ public class GameScreen extends ScreenAdapter {
             onScreenController.draw();
         batch.end();
         stageHandler.draw(deltaTime);
+        player.draw(deltaTime);
     }
 
     private void drawPaperBallsThrown(){

@@ -1,5 +1,5 @@
 player-sprites.png
-size: 288, 32
+size: 416, 32
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -31,37 +31,65 @@ player-jumping
   orig: 32, 32
   offset: 0, 0
   index: -1
-player-standing
+player-on-floor1
   rotate: false
   xy: 128, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-player-standing2
+player-on-floor2
   rotate: false
   xy: 160, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-player-walking1
+player-on-floor3
   rotate: false
   xy: 192, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-player-walking2
+player-on-floor4
   rotate: false
   xy: 224, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-player-walking3
+player-standing
   rotate: false
   xy: 256, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+player-standing2
+  rotate: false
+  xy: 288, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+player-walking1
+  rotate: false
+  xy: 320, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+player-walking2
+  rotate: false
+  xy: 352, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+player-walking3
+  rotate: false
+  xy: 384, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

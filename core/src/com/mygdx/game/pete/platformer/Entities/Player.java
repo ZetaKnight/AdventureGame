@@ -1,6 +1,5 @@
 package com.mygdx.game.pete.platformer.Entities;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -17,6 +16,7 @@ import com.mygdx.game.pete.platformer.CollisionCell;
 import com.mygdx.game.pete.platformer.Controllers.OnScreenController;
 import com.mygdx.game.pete.platformer.Screens.GameScreen;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.mygdx.game.pete.platformer.Transitions.FadeInTransition;
 
 /**
  * Created by Amar on 22/08/2017.
@@ -42,6 +42,7 @@ public class Player {
     private Animation walking;
     private Animation standing;
     private Animation climbing;
+    private Animation falling;
     private TextureRegion climbedOn;
     private TextureRegion jumpUp;
     private TextureRegion jumpDown;
@@ -57,6 +58,7 @@ public class Player {
     private int paperBallsAmount = 0;
     private GameScreen gameScreen;
     private OnScreenController onScreenController;
+    private FadeInTransition attacked = null;
 
     public Player(Texture texture, Sound jumpSound, Batch batch, GameScreen gameScreen){
         this.gameScreen = gameScreen;
@@ -64,10 +66,12 @@ public class Player {
         this.batch = batch;
         this.jumpSound = jumpSound;
         TextureRegion[] regions = TextureRegion.split(texture, WIDTH,HEIGHT)[0];
-        standing = new Animation(.2f, regions[4],regions[5]);
+        standing = new Animation(.2f, regions[8],regions[9]);
         standing.setPlayMode(Animation.PlayMode.LOOP);
-        walking =  new Animation(.1f, regions[6], regions[7], regions[8]);
+        walking =  new Animation(.1f, regions[10], regions[11], regions[12]);
         walking.setPlayMode(Animation.PlayMode.LOOP);
+        falling = new Animation(.2f, regions[4], regions[5], regions[6], regions[7]);
+        falling.setPlayMode(Animation.PlayMode.NORMAL);
         climbing =  new Animation(.25f, regions[0], regions[1]);
         climbing.setPlayMode(Animation.PlayMode.LOOP);
         climbedOn = regions[0];
@@ -247,9 +251,16 @@ public class Player {
         blockJump = jumpYDistance > MAX_JUMP_DISTANCE;
     }
 
+    public void draw(float deltaTime){
+        handleAttackedScreenEffect(deltaTime);
+    }
+
     public void draw(){
         toDraw = standing.getKeyFrame(animationTimer);
-        if(isClimbing && isMoving()) {
+        if(health < 1){
+            initiateAnimationTimerToZeroOnce();
+            toDraw = falling.getKeyFrame(animationTimer);
+        }else if(isClimbing && isMoving()) {
             toDraw = climbing.getKeyFrame(animationTimer);
         }else if(isClimbing){
             toDraw = climbedOn;
@@ -273,6 +284,14 @@ public class Player {
         batch.draw(toDraw, x, y);
     }
 
+    private boolean animationTimerSetZero = false;
+    private void initiateAnimationTimerToZeroOnce(){
+        if(!animationTimerSetZero){
+            animationTimerSetZero = true;
+            animationTimer = 0;
+        }
+    }
+
     private boolean isMoving(){
         return (xSpeed != 0 || ySpeed != 0);
     }
@@ -285,8 +304,25 @@ public class Player {
         collisionRect.setPosition(x, y);
     }
 
-    private void deathSequence(){
+    private void handleAttackedScreenEffect(float deltaTime){
+        if(attacked != null)
+            if(!attacked.isTransitionDone()){
+                attacked.update(deltaTime);
+            }else{
+                attacked = null;
+            }
+    }
 
+    private void deathSequence(){
+        xSpeed = 0;
+        if (!onLand) {
+            ySpeed = -MAX_Y_SPEED;
+            blockJump = jumpYDistance > 0;
+        } else {
+            // if in the air
+            ySpeed = -2;
+            blockJump = jumpYDistance > 0;
+        }
     }
 
     public void setPosition(float x, float y){
@@ -349,20 +385,11 @@ public class Player {
         this.throwPaperBallLeft = throwPaperBallLeft;
     }
 
-    public void setOnClimbable(boolean onClimbable){
-        this.onClimbable = onClimbable;
-    }
-
-    public void setIsClimbing(boolean isClimbing){
-        this.isClimbing = isClimbing;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
     public void deductHealth(){
-        this.health--;
+        health--;
+        if(attacked==null){
+            attacked = new FadeInTransition(gameScreen.getCamera());
+        }
     }
 
     public void addPaperBall(){
