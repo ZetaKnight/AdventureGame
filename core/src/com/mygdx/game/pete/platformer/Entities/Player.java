@@ -82,7 +82,7 @@ public class Player {
         isClimbing = false;
         openDoor = false;
         door_entry = DOOR_ENTRY.UNFROZEN;
-        health = 3;
+        health = 100;
     }
 
     public void update(float delta){

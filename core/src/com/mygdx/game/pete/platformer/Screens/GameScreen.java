@@ -165,10 +165,10 @@ public class GameScreen extends ScreenAdapter {
         hiddenLayer = (TiledMapTileLayer) tiledMap.getLayers().get(HIDDEN);
         if(hidden == false) hiddenLayer.setOpacity(1);
         else hiddenLayer.setOpacity(.5f);
+        player.draw();
         for(NPC_1 npc : npcs){
             npc.draw();
         }
-        player.draw();
         drawPaperBallsThrown();
         drawStackPaper();
         orthogonalTiledMapRenderer.renderTileLayer(hiddenLayer);
@@ -231,7 +231,7 @@ public class GameScreen extends ScreenAdapter {
                 .get("jump2.wav", Sound.class),batch, this);
         populateNPCs();
         petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).setLooping(true);
-//        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
+        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
         populateStackedPaper();
         hud = new HUD(this);
 
