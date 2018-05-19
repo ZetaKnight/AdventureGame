@@ -407,4 +407,8 @@ public class Player {
     public boolean isMovingRight(){
         return xSpeed > 0;
     }
+
+    public boolean isMovingLeft(){
+        return xSpeed < 0;
+    }
 }

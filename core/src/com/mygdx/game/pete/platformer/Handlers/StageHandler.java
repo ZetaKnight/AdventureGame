@@ -27,6 +27,7 @@ public class StageHandler {
     public static final String X = "x";
     public static final String Y = "y";
     public static final String OPEN = "open";
+    public static final String DIRECTION_THROUGH = "directionThrough";
 
     private final GameScreen gameScreen;
     private Player player;
@@ -99,13 +100,24 @@ public class StageHandler {
             for(MapObject object: mapLayer.getObjects()){
                 float newLocX = Float.valueOf(String.valueOf(object.getProperties().get(LOCATION_X)));
                 float newLocY = Float.valueOf(String.valueOf(object.getProperties().get(LOCATION_Y)));
-                float x = (object.getProperties().get(X, Float.class));
-                float y = (object.getProperties().get(Y, Float.class));
+                float xPosOfObject = (object.getProperties().get(X, Float.class));
+                float yPosOfObject = (object.getProperties().get(Y, Float.class));
                 String stage = String.valueOf(object.getProperties().get(OPEN));
-                if(player.isMovingRight() && player.getCollisionRect().overlaps(
-                    new Rectangle(x, y, GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4))){
+                String directionToMoveThrough = String.valueOf(object.getProperties().get(DIRECTION_THROUGH));
+                if(directionToMoveThrough.equals("right")){
+                    if(player.isMovingRight() && player.getCollisionRect().overlaps(
+                            new Rectangle(xPosOfObject, yPosOfObject, 1,
+                            GameScreen.CELL_SIZE*4))){
                         handleNextLevel(stage, newLocX, newLocY);
                         fadeInTransition = new FadeInTransition(gameScreen.getCamera());
+                    }
+                }else if(directionToMoveThrough.equals("left")){
+                    if(player.isMovingLeft() && player.getCollisionRect().overlaps(
+                    new Rectangle(xPosOfObject, yPosOfObject, 1,
+                    GameScreen.CELL_SIZE*4))){
+                        handleNextLevel(stage, newLocX, newLocY);
+                        fadeInTransition = new FadeInTransition(gameScreen.getCamera());
+                    }
                 }
             }
         }

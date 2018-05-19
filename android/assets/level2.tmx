@@ -85,7 +85,8 @@
  <objectgroup name="Passage">
   <object id="45" x="2392" y="368" width="8" height="64">
    <properties>
-    <property name="locationX" value="2"/>
+    <property name="directionThrough" value="right"/>
+    <property name="locationX" value="0"/>
     <property name="locationY" value="3"/>
     <property name="open" value="stage1.tmx"/>
    </properties>

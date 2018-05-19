@@ -65,8 +65,9 @@
   </object>
  </objectgroup>
  <objectgroup name="Passage">
-  <object id="43" x="-4" y="384" width="7" height="48">
+  <object id="43" x="0" y="385" width="5" height="47">
    <properties>
+    <property name="directionThrough" value="left"/>
     <property name="locationX" value="149"/>
     <property name="locationY" value="3"/>
     <property name="open" value="level2.tmx"/>
