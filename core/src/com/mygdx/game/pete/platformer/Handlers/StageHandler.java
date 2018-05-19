@@ -21,6 +21,12 @@ import static com.badlogic.gdx.utils.TimeUtils.millis;
 public class StageHandler {
 
     public static final String DOOR = "Door";
+    public static final String PASSAGE = "Passage";
+    public static final String LOCATION_X = "locationX";
+    public static final String LOCATION_Y = "locationY";
+    public static final String X = "x";
+    public static final String Y = "y";
+    public static final String OPEN = "open";
 
     private final GameScreen gameScreen;
     private Player player;
@@ -30,19 +36,22 @@ public class StageHandler {
     private FadeInTransition fadeInTransition;
     private Sound doorOpen;
 
-    public StageHandler(
-            GameScreen gameScreen, Player player, PetePlatformer petePlatformer)
-    {
+    public StageHandler(GameScreen gameScreen, Player player, PetePlatformer petePlatformer) {
         this.gameScreen = gameScreen;
         this.player = player;
         this.petePlatformer = petePlatformer;
         fadeInTransition = null;
         doorOpen = petePlatformer.getAssetManager()
-                .get("open_interior_wood_door.mp3",Sound.class);
+                   .get("open_interior_wood_door.mp3",Sound.class);
     }
 
     public void update(float deltaTime){
         currentTime = millis();
+        handleDoor();
+        handlePassage();
+    }
+
+    private void handleDoor(){
         if(player.door_entry == Player.DOOR_ENTRY.FROZEN) {
             if(unfreezePlayerControlsAndAnimationTime <= currentTime)
                 player.door_entry = Player.DOOR_ENTRY.UNFROZEN;
@@ -55,16 +64,15 @@ public class StageHandler {
         if(player.isOpenDoor()){
             MapLayer mapLayer = gameScreen.getTiledMap().getLayers().get(DOOR);
             for(MapObject object: mapLayer.getObjects()){
-                float newLocX = Float.valueOf(String.valueOf(object.getProperties().get("locationX")));
-                float newLocY = Float.valueOf(String.valueOf(object.getProperties().get("locationY")));
-                float x = (object.getProperties().get("x", Float.class));
-                float y = (object.getProperties().get("y", Float.class));
-                String stage = String.valueOf(object.getProperties().get("open"));
+                float newLocX = Float.valueOf(String.valueOf(object.getProperties().get(LOCATION_X)));
+                float newLocY = Float.valueOf(String.valueOf(object.getProperties().get(LOCATION_Y)));
+                float x = (object.getProperties().get(X, Float.class));
+                float y = (object.getProperties().get(Y, Float.class));
+                String stage = String.valueOf(object.getProperties().get(OPEN));
                 if(player.getCollisionRect()
-                        .overlaps(new Rectangle(x, y,
-                                GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4))){
+                        .overlaps(new Rectangle(x, y,GameScreen.CELL_SIZE*2,
+                                        GameScreen.CELL_SIZE*4))){
                     handleNextLevel(stage, newLocX, newLocY);
-                    fadeInTransition = new FadeInTransition(gameScreen.getCamera());
                 }
                 player.setOpenDoor(false);
             }
@@ -83,6 +91,24 @@ public class StageHandler {
         gameScreen.populateNPCs();
         gameScreen.populateStackedPaper();
         doorOpen.play();
+    }
+
+    private void handlePassage(){
+        MapLayer mapLayer = gameScreen.getTiledMap().getLayers().get(PASSAGE);
+        if(mapLayer != null){
+            for(MapObject object: mapLayer.getObjects()){
+                float newLocX = Float.valueOf(String.valueOf(object.getProperties().get(LOCATION_X)));
+                float newLocY = Float.valueOf(String.valueOf(object.getProperties().get(LOCATION_Y)));
+                float x = (object.getProperties().get(X, Float.class));
+                float y = (object.getProperties().get(Y, Float.class));
+                String stage = String.valueOf(object.getProperties().get(OPEN));
+                if(player.isMovingRight() && player.getCollisionRect().overlaps(
+                    new Rectangle(x, y, GameScreen.CELL_SIZE*2, GameScreen.CELL_SIZE*4))){
+                        handleNextLevel(stage, newLocX, newLocY);
+                        fadeInTransition = new FadeInTransition(gameScreen.getCamera());
+                }
+            }
+        }
     }
 
     private void handleTransition(float deltaTime){

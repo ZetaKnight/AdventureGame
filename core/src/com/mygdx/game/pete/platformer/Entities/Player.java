@@ -37,7 +37,7 @@ public class Player {
     private float ySpeed = 0;
     private boolean blockJump = false;
     private float jumpYDistance = 0;
-    private static final float MAX_JUMP_DISTANCE = 3 * HEIGHT;
+    private static final float MAX_JUMP_DISTANCE = 1 * HEIGHT;
     private float animationTimer = 0;
     private Animation walking;
     private Animation standing;
@@ -402,5 +402,9 @@ public class Player {
 
     public void decreasePaperBall(){
         paperBallsAmount--;
+    }
+
+    public boolean isMovingRight(){
+        return xSpeed > 0;
     }
 }

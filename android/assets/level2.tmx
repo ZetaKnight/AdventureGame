@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="16" tileheight="16" nextobjectid="43">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="16" tileheight="16" nextobjectid="47">
  <tileset firstgid="1" name="floor" tilewidth="16" tileheight="16" tilecount="18" columns="6">
   <image source="platform.png" width="96" height="48"/>
  </tileset>
@@ -79,6 +79,15 @@
   <object id="42" x="352" y="416" width="16" height="16">
    <properties>
     <property name="type" value="enemy"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Passage">
+  <object id="45" x="2392" y="368" width="8" height="64">
+   <properties>
+    <property name="locationX" value="2"/>
+    <property name="locationY" value="3"/>
+    <property name="open" value="stage1.tmx"/>
    </properties>
   </object>
  </objectgroup>

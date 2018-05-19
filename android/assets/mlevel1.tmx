@@ -36,17 +36,17 @@
  </layer>
  <layer name="Background" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztzrENgDAQBEE3ZGMM/dfGF/HSBcxIm+8YAAAAAJAxq5WeaHBVOz3R4K5OeqLBU73pCX7pA4+rAYU=
+   eJztwTEBAAAAwqD1T20IX6AAAAAAAIDXABdwAAE=
   </data>
  </layer>
  <layer name="Furniture" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztzMkJwDAMRFH3kN19ZE/cf1kZNyD5EIgh/8FHoMOEAAAAAAAAgD9rVGvcWjY9neqNW8umZ1CjcbNZLWpVm9qdf8nm2yYVjZsd6lSXulVy/iWbwJces00KHw==
+   eJztwTEBAAAAwqD1T20IX6AAAAAAAIDXABdwAAE=
   </data>
  </layer>
  <layer name="Climbable" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztz9EJgDAUBMH0X4dgm6YIxc1jBu7/di0AvnDt3X+feIGOFh0tOlp0tOhomdYxred0Olp0tOhomdJB2wMdLxxz
+   eJztwTEBAAAAwqD1T20IX6AAAAAAAIDXABdwAAE=
   </data>
  </layer>
  <objectgroup name="Door">
@@ -55,18 +55,8 @@
    <property name="LocationY" value="26"/>
    <property name="Opens" value="level2.tmx"/>
   </properties>
-  <object id="21" x="656" y="368" width="32" height="64">
-   <properties>
-    <property name="locationX" value="26"/>
-    <property name="locationY" value="3"/>
-    <property name="open" value="level2.tmx"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup name="Stacked Paper">
-  <object id="32" gid="63" x="320" y="384" width="16" height="16"/>
-  <object id="43" gid="63" x="352" y="384" width="16" height="16"/>
-  <object id="44" gid="63" x="416" y="384" width="16" height="16"/>
   <object id="45" gid="63" x="448" y="384" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Desk"/>

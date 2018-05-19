@@ -45,6 +45,7 @@ public class LoadingScreen extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
         petePlatformer.getAssetManager().load("level1.tmx", TiledMap.class);
         petePlatformer.getAssetManager().load("level2.tmx", TiledMap.class);
+        petePlatformer.getAssetManager().load("stage1.tmx", TiledMap.class);
 //        petePlatformer.getAssetManager().load("pete.png", Texture.class);
         petePlatformer.getAssetManager().load(Player.CHARACTER, Texture.class);
         petePlatformer.getAssetManager().load(NPC_1.CHARACTER, Texture.class);

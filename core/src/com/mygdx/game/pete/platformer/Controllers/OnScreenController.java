@@ -15,6 +15,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.pete.platformer.Screens.GameScreen;
 
 public class OnScreenController {
+    public static final String RIGHT_PNG = "right.png";
+    public static final String LEFT_PNG = "left.png";
+    public static final String ATTACK_PNG = "attack.png";
+    public static final String UP_PNG = "up.png";
     private OrthographicCamera cam;
     private Viewport viewPort;
     private Stage stage;
@@ -34,11 +38,11 @@ public class OnScreenController {
         stage = new Stage(viewPort, batch);
         Gdx.input.setInputProcessor(stage);
 
-        rightImg = new Image(new Texture("right.png"));
+        rightImg = new Image(new Texture(RIGHT_PNG));
         rightImg.setSize(50, 50);
         rightImg.addListener(getRightButtonListener());
 
-        leftImg = new Image(new Texture("left.png"));
+        leftImg = new Image(new Texture(LEFT_PNG));
         leftImg.setSize(50, 50);
         leftImg.addListener(getLeftButtonListener());
 
@@ -49,11 +53,11 @@ public class OnScreenController {
         table.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
         table.add(rightImg).size(rightImg.getWidth(), rightImg.getHeight());
 
-        attackImg = new Image(new Texture("attack.png"));
+        attackImg = new Image(new Texture(ATTACK_PNG));
         attackImg.setSize(50, 50);
         attackImg.addListener(getAttackButtonListener());
 
-        upImg = new Image(new Texture("up.png"));
+        upImg = new Image(new Texture(UP_PNG));
         upImg.setSize(50, 50);
         upImg.addListener(getUpButtonListener());
 
