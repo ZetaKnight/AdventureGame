@@ -45,6 +45,7 @@ public class GameScreen extends ScreenAdapter {
     private static final String BACKGROUND = "Background";
     private static final String NPC = "NPC";
     private static final String CLIMBABLE = "Climbable";
+    private static final String STAIRS = "Stairs";
 
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
@@ -162,6 +163,8 @@ public class GameScreen extends ScreenAdapter {
         orthogonalTiledMapRenderer.renderTileLayer((TiledMapTileLayer) tiledMap.getLayers().get(PLATFORM));
         orthogonalTiledMapRenderer.renderTileLayer((TiledMapTileLayer) tiledMap.getLayers().get(FURNITURE));
         orthogonalTiledMapRenderer.renderTileLayer((TiledMapTileLayer) tiledMap.getLayers().get(CLIMBABLE));
+        if(tiledMap.getLayers().get(STAIRS) != null)
+            orthogonalTiledMapRenderer.renderTileLayer((TiledMapTileLayer) tiledMap.getLayers().get(STAIRS));
         hiddenLayer = (TiledMapTileLayer) tiledMap.getLayers().get(HIDDEN);
         if(hidden == false) hiddenLayer.setOpacity(1);
         else hiddenLayer.setOpacity(.5f);
@@ -231,7 +234,7 @@ public class GameScreen extends ScreenAdapter {
                 .get("jump2.wav", Sound.class),batch, this);
         populateNPCs();
         petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).setLooping(true);
-        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
+//        petePlatformer.getAssetManager().get("peteTheme.mp3", Music.class).play();
         populateStackedPaper();
         hud = new HUD(this);
 
@@ -464,7 +467,6 @@ public class GameScreen extends ScreenAdapter {
                 if(collisionCells.size>0 || paperBallHit){
                     paperBall.setTexture(petePlatformer.getAssetManager().get(PaperBall.PAPER_BALL_BANG, Texture.class));
                     paperBall.setHit(true);
-//                    npc_1.setHit(true);
                 }
             }
         }

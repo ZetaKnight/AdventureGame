@@ -37,7 +37,7 @@
  </layer>
  <layer name="Platform" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJzt1bkJwDAQAEH35cL9/29ZXnegxBLCO7DJwcEpUlFIkiRJkqQYytQHRPa391YfJ0mS0nr/45oaaqmjPsN56N5AI00000JrhvPQvY12Ouiki+4M56F7D4HKmC0=
+   eJzt1ckJgDAYBWH7snD3fS3LsQAheIgE54O5/PAgnswySZIkSZIUQ/71AyL72/cWAb3dPW0lSVI89/+4pIpqaqhN8B6666ingUaaaE7wHrpbaKWNdjroTPAeursAvuCUmg==
   </data>
  </layer>
  <layer name="Hidden" width="60" height="30">
@@ -52,7 +52,12 @@
  </layer>
  <layer name="Climbable" width="60" height="30">
   <data encoding="base64" compression="zlib">
-   eJztz8EJADAMA7HsP0mgS7ZTpMFI4L+vCgAAAIDt+u38PjFIbza92fRm0wsZLs3aC+w=
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAvBhwgAAE=
+  </data>
+ </layer>
+ <layer name="Stairs" width="60" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztz9kJACAUA0Gr8uq/MNOECo8Z2P+kNQAAAABe6GmkmVbaf+dc529t/tbmb23+AgcuJQnZ
   </data>
  </layer>
  <objectgroup name="Stacked Paper"/>

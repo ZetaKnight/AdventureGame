@@ -50,6 +50,7 @@ public class Player {
     private Sound jumpSound;
     private boolean openDoor;
     private boolean onClimbable, isClimbing;
+    private boolean isWalkingOnStairs;
     private TextureRegion toDraw;
     public static final String CHARACTER = "player-sprites.png";
     private Batch batch;
@@ -80,6 +81,7 @@ public class Player {
         onLand = false;
         onClimbable = false;
         isClimbing = false;
+        isWalkingOnStairs = false;
         openDoor = false;
         door_entry = DOOR_ENTRY.UNFROZEN;
         health = 100;
@@ -136,13 +138,14 @@ public class Player {
 
     private void controlInput(){
         Input input = Gdx.input;
-        controlLeftAndRightInput(input);
-        controlUpInput(input);
-        if (input.isKeyPressed(Input.Keys.SPACE) &&
-                door_entry == DOOR_ENTRY.UNFROZEN ||
-                ((input.isTouched() && input.getY() < 150) &&
-                door_entry == DOOR_ENTRY.UNFROZEN)) {
-            setOpenDoor(true);
+        controlInputOnStairs(input);
+        if(!isWalkingOnStairs) {
+            controlLeftAndRightInput(input);
+            controlUpInput(input);
+            if (input.isKeyPressed(Input.Keys.SPACE) && door_entry == DOOR_ENTRY.UNFROZEN ||
+                ((input.isTouched() && input.getY() < 150) && door_entry == DOOR_ENTRY.UNFROZEN)) {
+                setOpenDoor(true);
+            }
         }
         if (input.isKeyJustPressed(Input.Keys.S)) {
             if (toDraw.isFlipX()) {
@@ -150,6 +153,15 @@ public class Player {
             } else if (!toDraw.isFlipX()) {
                 setThrowPaperBallRight(true);
             }
+        }
+    }
+
+    private void controlInputOnStairs(Input input){
+        if(isMoving()) {
+            tryWalkingOnStairs();
+        }
+        if(isWalkingOnStairs){
+            walkInDirection(input);
         }
     }
 
@@ -195,11 +207,15 @@ public class Player {
     }
 
     private void tryClimbing(){
-        onClimbable = handlePlayerOnClimbable();
+        onClimbable = handlePlayerOn("Climbable");
         isClimbing = onClimbable;
     }
 
-    private boolean handlePlayerOnClimbable(){
+    private void tryWalkingOnStairs(){
+        isWalkingOnStairs = handlePlayerOn("Stairs");
+    }
+
+    private boolean handlePlayerOn(String tiledLayer){
         float x = this.getX();
         float y = this.getY();
 
@@ -211,13 +227,14 @@ public class Player {
         Array<CollisionCell> cellsCovered = new Array<CollisionCell>();
         TiledMapTileLayer tiledMapTileLayer = (TiledMapTileLayer) gameScreen
                 .getTiledMap().getLayers()
-                .get("Climbable");
+                .get(tiledLayer);
+        if(tiledMapTileLayer == null) return false;
         cellsCovered.add(new CollisionCell(tiledMapTileLayer.getCell(
                 bottomLCellX, bottomLCellY),
                 bottomLCellX, bottomLCellY));
         cellsCovered = gameScreen.filterOutNonTiledCells(cellsCovered);
 
-        return (cellsCovered.size>0) ? true : false;
+        return cellsCovered.size > 0;
     }
 
     private boolean canClimb(){
@@ -238,6 +255,21 @@ public class Player {
 
         if (input.isKeyPressed(Input.Keys.A))
             isClimbing = false;
+    }
+
+
+    private void walkInDirection(Input input){
+        tryWalkingOnStairs();
+        if (input.isKeyPressed(Input.Keys.RIGHT))
+            xSpeed = MAX_X_SPEED;
+        else if (input.isKeyPressed(Input.Keys.LEFT))
+            xSpeed = -MAX_X_SPEED;
+        else xSpeed = 0;
+        if (input.isKeyPressed(Input.Keys.DOWN))
+            ySpeed = -MAX_Y_SPEED;
+        else if (input.isKeyPressed(Input.Keys.UP))
+            ySpeed = MAX_Y_SPEED;
+        else ySpeed = 0;
     }
 
     private boolean canJump(Input input){
@@ -264,7 +296,13 @@ public class Player {
             toDraw = climbing.getKeyFrame(animationTimer);
         }else if(isClimbing){
             toDraw = climbedOn;
-        }else {
+        }else if(isWalkingOnStairs && isMoving()) {
+            //TODO update to reflect walking on stairs
+            toDraw = climbing.getKeyFrame(animationTimer);
+        }else if(isWalkingOnStairs){
+            //TODO update to reflect standing on stairs
+            toDraw = climbedOn;
+        }else{
             if (xSpeed != 0) {
                 toDraw = walking.getKeyFrame(animationTimer);
             }

@@ -46,7 +46,12 @@
  </layer>
  <layer name="Climbable" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztz9EJgDAUBMH0X4dgm6YIxc1jBu7/di0AvnDt3X+feIGOFh0tOlp0tOhomdYxred0Olp0tOhomdJB2wMdLxxz
+   eJztwTEBAAAAwqD1T20IX6AAAAAAAIDXABdwAAE=
+  </data>
+ </layer>
+ <layer name="Stairs" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztz8ENABAUBFEFuSIu+i/Lb0FIDJmX7H0nJUm/GrcPHGIHy6sdOVZiNdZi/e6dLXaw2MFiB4sdLHaw2MFiB4sdLHZIayYLghFm
   </data>
  </layer>
  <objectgroup name="Door">
